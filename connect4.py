@@ -1030,14 +1030,14 @@ while again.upper() == "Y":
         board()
         while not gameOver:
             player = 1
-            choice = input (bcolors.GREEN + "\nColumn: " + bcolors.ENDC)
+            choice = input (bcolors.GREEN + "\nPlayer 1 column: " + bcolors.ENDC)
             choice = validChoice(choice,player)
             r1,r2,r3,r4,r5,r6 = updateBoard()
             gameOver,winner = checkGameOver(r1,r2,r3,r4,r5,r6)
             if gameOver:
                 break
             player = 2
-            choice2 = input (bcolors.GREEN + "\nColumn: " + bcolors.ENDC)
+            choice2 = input (bcolors.GREEN + "\nPlayer 2 column: " + bcolors.ENDC)
             choice2 = validChoice(choice2,player)
             r1,r2,r3,r4,r5,r6 = updateBoard()
             gameOver,winner = checkGameOver(r1,r2,r3,r4,r5,r6)
