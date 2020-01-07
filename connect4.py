@@ -17,6 +17,15 @@ class bcolors:
     WHITE     = '\33[37m'
     GREEN     = '\033[92m'
 
+def title():
+    print (bcolors.YELLOW + bcolors.BOLD + bcolors.BOLD + """
+   _____                                  _     _  _
+  / ____|                                | |   | || |
+ | |      ___   _ __   _ __    ___   ___ | |_  | || |_
+ | |     / _ \ | '_ \ | '_ \  / _ \ / __|| __| |__   _|
+ | |____| (_) || | | || | | ||  __/| (__ | |_     | |
+  \_____|\___/ |_| |_||_| |_| \___| \___| \__|    |_|  """ + bcolors.ENDC)
+
 def board():
     print (bcolors.GREY + """
        |  """ + bcolors.ENDC + bcolors.WHITE + bcolors.BOLD + """◉  ◉  ◉  ◉  ◉  ◉  ◉  """ + bcolors.ENDC + bcolors.GREY + """|
@@ -997,7 +1006,8 @@ while again.upper() == "Y":
     c6 = ["free","free","free","free","free","free"]
     c7 = ["free","free","free","free","free","free"]
 
-    print (bcolors.GREEN + "1. 1 player (against computer)\n2. 2 players (1v1)" + bcolors.ENDC)
+    title()
+    print (bcolors.GREEN + "\n1. 1 player (against computer)\n2. 2 players (1v1)" + bcolors.ENDC)
     solo = input (bcolors.GREEN + "\nChoice: " + bcolors.ENDC)
 
     if solo == "1":
