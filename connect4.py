@@ -18,7 +18,7 @@ class bcolors:
     GREEN     = '\033[92m'
 
 def title():
-    print (bcolors.YELLOW + bcolors.BOLD + bcolors.BOLD + """
+    print (bcolors.WHITE + bcolors.BOLD + """
    _____                                  _     _  _
   / ____|                                | |   | || |
  | |      ___   _ __   _ __    ___   ___ | |_  | || |_
@@ -1564,14 +1564,22 @@ while again.upper() == "Y":
     c7 = ["free","free","free","free","free","free"]
 
     title()
-    print (bcolors.GREEN + "\n1. 1 player (against computer)\n2. 2 players (1v1)" + bcolors.ENDC)
+    print(bcolors.YELLOW + '''
+Choose a Game Mode:
+1) 1 player (against computer)
+2) 2 players (1v1)
+''' + bcolors.ENDC + '--------------------------------------------------------------')
     solo = input (bcolors.GREEN + "\nChoice: " + bcolors.ENDC)
 
     if solo == "1":
         gameOver = False
         valid = False
         while not valid:
-            print (bcolors.GREEN + "\n\n1. Easy\n2. Normal" + bcolors.ENDC)
+            print(bcolors.YELLOW + '''
+    Choose a Difficulty:
+    1) Easy
+    2) Normal
+    ''' + bcolors.ENDC + '--------------------------------------------------------------')
             difficulty = input (bcolors.GREEN + "\nChoice: " + bcolors.ENDC)
             if difficulty == "1":
                 dif = "ez"
