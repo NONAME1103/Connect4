@@ -814,7 +814,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 if count2 == 1:
                     if r != 0 and r1[r - 1] == "free":
                         checkLeft = True
-                        left = r - 1
+                        left2 = r - 1
                     else:
                         checkLeft = False
             if count2 < 4 and r1[r] != "p2":
@@ -825,8 +825,8 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                     else:
                         priority2 = 1
                 elif count == 3 and checkLeft and priority2 < 1:
-                    close2 = "c" + str (left + 1) + " r1"
-                    if r2[left] == "free":
+                    close2 = "c" + str (left2 + 1) + " r1"
+                    if r2[left2] == "free":
                         priority2 = 0
                     else:
                         priority2 = 1
@@ -845,7 +845,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 if count2 == 1:
                     if r != 0 and r2[r - 1] == "free":
                         checkLeft = True
-                        left = r - 1
+                        left2 = r - 1
                     else:
                         checkLeft = False
             if count2 < 4 and r2[r] != "p2":
@@ -856,8 +856,8 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                     else:
                         priority2 = 1
                 elif count == 3 and checkLeft and priority2 < 1:
-                    close2 = "c" + str (left + 1) + " r2"
-                    if r3[left] == "free":
+                    close2 = "c" + str (left2 + 1) + " r2"
+                    if r3[left2] == "free":
                         priority2 = 0
                     else:
                         priority2 = 1
@@ -876,7 +876,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 if count2 == 1:
                     if r != 0 and r3[r - 1] == "free":
                         checkLeft = True
-                        left = r - 1
+                        left2 = r - 1
                     else:
                         checkLeft = False
             if count2 < 4 and r3[r] != "p2":
@@ -887,8 +887,8 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                     else:
                         priority2 = 1
                 elif count == 3 and checkLeft and priority2 < 1:
-                    close2 = "c" + str (left + 1) + " r3"
-                    if r4[left] == "free":
+                    close2 = "c" + str (left2 + 1) + " r3"
+                    if r4[left2] == "free":
                         priority2 = 0
                     else:
                         priority2 = 1
@@ -907,7 +907,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 if count2 == 1:
                     if r != 0 and r4[r - 1] == "free":
                         checkLeft = True
-                        left = r - 1
+                        left2 = r - 1
                     else:
                         checkLeft = False
             if count2 < 4 and r4[r] != "p2":
@@ -918,8 +918,8 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                     else:
                         priority2 = 1
                 elif count == 3 and checkLeft and priority2 < 1:
-                    close2 = "c" + str (left + 1) + " r4"
-                    if r5[left] == "free":
+                    close2 = "c" + str (left2 + 1) + " r4"
+                    if r5[left2] == "free":
                         priority2 = 0
                     else:
                         priority2 = 1
@@ -938,7 +938,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 if count2 == 1:
                     if r != 0 and r5[r - 1] == "free":
                         checkLeft = True
-                        left = r - 1
+                        left2 = r - 1
                     else:
                         checkLeft = False
             if count2 < 4 and r5[r] != "p2":
@@ -949,8 +949,8 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                     else:
                         priority2 = 1
                 elif count == 3 and checkLeft and priority2 < 1:
-                    close2 = "c" + str (left + 1) + " r5"
-                    if r6[left] == "free":
+                    close2 = "c" + str (left2 + 1) + " r5"
+                    if r6[left2] == "free":
                         priority2 = 0
                     else:
                         priority2 = 1
@@ -969,7 +969,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 if count2 == 1:
                     if r != 0 and r6[r - 1] == "free":
                         checkLeft = True
-                        left = r - 1
+                        left2 = r - 1
                     else:
                         checkLeft = False
             if count2 < 4 and r6[r] != "p2":
@@ -977,7 +977,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                     close2 = "c" + str (r + 1) + " r6"
                     priority2 = 1
                 elif count == 3 and checkLeft and priority2 < 1:
-                    close2 = "c" + str (left + 1) + " r6"
+                    close2 = "c" + str (left2 + 1) + " r6"
                     priority2 = 1
                 count2 = 0
             if count2 >= 4:
