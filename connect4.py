@@ -105,7 +105,6 @@ def updateBoard():
     print ( bcolors.GREY + "     |   " + bcolors.ENDC +  bcolors.WHITE + bcolors.BOLD + "1   2   3   4   5   6   7   " + bcolors.ENDC +  bcolors.GREY + "|" + bcolors.ENDC)
     return r1,r2,r3,r4,r5,r6
 
-
 def winner1():
     print (bcolors.WHITE + bcolors.BOLD + bcolors.BOLD + """
  __          __ _                                _____   _                              __
@@ -116,7 +115,6 @@ def winner1():
      \/  \/    |_||_| |_||_| |_| \___||_|  (_)  |_|     |_| \__,_| \__, | \___||_|      |_|
                                                                     __/ |
                                                                    |___/                   """ + bcolors.ENDC)
-
 
 def winner2():
     print (bcolors.WHITE + bcolors.BOLD + bcolors.BOLD + """
@@ -129,7 +127,6 @@ def winner2():
                                                                     __/ |
                                                                    |___/                     """ + bcolors.ENDC)
 
-
 def draw():
     print (bcolors.WHITE + bcolors.BOLD + bcolors.BOLD + """
     _____
@@ -140,7 +137,79 @@ def draw():
     |_____/ |_|   \__,_|  \_/\_/
                                """ + bcolors.ENDC)
 
-
+def normMode(r1,col,close,priority,close2,priority2):
+    if priority2 == 0:
+        if 0 < priority < 3:
+            while col == int (close[1]):
+                col = random.randint (1,7)
+                if int (close[1]) == 1 and r1[1] != "free" and r1[2] != "free" and r1[3] != "free" and r1[4] != "free" and r1[5] != "free" and r1[6] != "free":
+                    col = 1
+                    break
+                elif int (close[1]) == 2 and r1[0] != "free" and r1[2] != "free" and r1[3] != "free" and r1[4] != "free" and r1[5] != "free" and r1[6] != "free":
+                    col = 2
+                    break
+                elif int (close[1]) == 3 and r1[0] != "free" and r1[1] != "free" and r1[3] != "free" and r1[4] != "free" and r1[5] != "free" and r1[6] != "free":
+                    col = 3
+                    break
+                elif int (close[1]) == 4 and r1[0] != "free" and r1[1] != "free" and r1[2] != "free" and r1[4] != "free" and r1[5] != "free" and r1[6] != "free":
+                    col = 4
+                    break
+                elif int (close[1]) == 5 and r1[0] != "free" and r1[1] != "free" and r1[2] != "free" and r1[3] != "free" and r1[5] != "free" and r1[6] != "free":
+                    col = 5
+                    break
+                elif int (close[1]) == 6 and r1[0] != "free" and r1[1] != "free" and r1[2] != "free" and r1[3] != "free" and r1[4] != "free" and r1[6] != "free":
+                    col = 6
+                    break
+                elif int (close[1]) == 7 and r1[0] != "free" and r1[1] != "free" and r1[2] != "free" and r1[3] != "free" and r1[4] != "free" and r1[5] != "free":
+                    col = 7
+                    break
+            skip = False
+        elif priority >= 3:
+            col = int (close[1])
+            skip = False
+        else:
+            col = validColumn(col)
+            skip = True
+    else:
+        col = int (close2[1])
+        skip = False
+    if not skip:
+        if col == 1:
+            for c in range (len (c1)):
+                if c1[c] == "free":
+                    c1[c] = "p2"
+                    break
+        if col == 2:
+            for c in range (len (c2)):
+                if c2[c] == "free":
+                    c2[c] = "p2"
+                    break
+        if col == 3:
+            for c in range (len (c3)):
+                if c3[c] == "free":
+                    c3[c] = "p2"
+                    break
+        if col == 4:
+            for c in range (len (c4)):
+                if c4[c] == "free":
+                    c4[c] = "p2"
+                    break
+        if col == 5:
+            for c in range (len (c5)):
+                if c5[c] == "free":
+                    c5[c] = "p2"
+                    break
+        if col == 6:
+            for c in range (len (c6)):
+                if c6[c] == "free":
+                    c6[c] = "p2"
+                    break
+        if col == 7:
+            for c in range (len (c7)):
+                if c7[c] == "free":
+                    c7[c] = "p2"
+                    break
+    return col
 
 def validColumn(column):
     valid = False
@@ -212,7 +281,6 @@ def validColumn(column):
         else:
             column = random.randint (1,7)
     return column
-
 
 def validChoice(column,player):
     valid = False
@@ -324,9 +392,12 @@ def validChoice(column,player):
             valid = False
     return column
 
-
 def checkGameOver(r1,r2,r3,r4,r5,r6):
     gameOver = False
+    close = "any"
+    close2 = "any"
+    priority = 0
+    priority2 = 0
     #Player 1 Vertical
     if not gameOver:
         count = 0
@@ -334,6 +405,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c1[c] == "p1":
                 count += 1
             if count < 4 and c1[c] != "p1":
+                if c1[c] == "free" and count == 3 and priority < 5:
+                    close = "c1"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -347,6 +421,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c2[c] == "p1":
                 count += 1
             if count < 4 and c2[c] != "p1":
+                if c2[c] == "free" and count == 3 and priority < 5:
+                    close = "c2"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -360,6 +437,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c3[c] == "p1":
                 count += 1
             if count < 4 and c3[c] != "p1":
+                if c3[c] == "free" and count == 3 and priority < 5:
+                    close = "c3"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -373,6 +453,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c4[c] == "p1":
                 count += 1
             if count < 4 and c4[c] != "p1":
+                if c4[c] == "free" and count == 3 and priority < 5:
+                    close = "c4"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -386,6 +469,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c5[c] == "p1":
                 count += 1
             if count < 4 and c5[c] != "p1":
+                if c5[c] == "free" and count == 3 and priority < 5:
+                    close = "c5"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -399,6 +485,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c6[c] == "p1":
                 count += 1
             if count < 4 and c6[c] != "p1":
+                if c6[c] == "free" and count == 3 and priority < 5:
+                    close = "c6"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -412,6 +501,9 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
             if c7[c] == "p1":
                 count += 1
             if count < 4 and c7[c] != "p1":
+                if c7[c] == "free" and count == 3 and priority < 5:
+                    close = "c7"
+                    priority = 5
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -421,91 +513,112 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 winner = "none"
     #Player 2 Vertical
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c1[c] == "p2":
-                count += 1
-            if count < 4 and c1[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c1[c] != "p2":
+                if c1[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c1"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c2[c] == "p2":
-                count += 1
-            if count < 4 and c2[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c2[c] != "p2":
+                if c2[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c2"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c3[c] == "p2":
-                count += 1
-            if count < 4 and c3[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c3[c] != "p2":
+                if c3[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c3"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c4[c] == "p2":
-                count += 1
-            if count < 4 and c4[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c4[c] != "p2":
+                if c4[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c4"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c5[c] == "p2":
-                count += 1
-            if count < 4 and c5[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c5[c] != "p2":
+                if c5[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c5"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c6[c] == "p2":
-                count += 1
-            if count < 4 and c6[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c6[c] != "p2":
+                if c6[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c6"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for c in range (6):
             if c7[c] == "p2":
-                count += 1
-            if count < 4 and c7[c] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+            if count2 < 4 and c7[c] != "p2":
+                if c7[c] == "free" and count2 == 3 and priority2 < 1:
+                    close2 = "c7"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
@@ -517,7 +630,25 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
         for r in range (7):
             if r1[r] == "p1":
                 count += 1
+                if count == 1:
+                    if r != 0 and r1[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
             if count < 4 and r1[r] != "p1":
+                if r1[r] == "free" and count == 3 and priority < 4:
+                    close = "c" + str (r + 1) + " r1"
+                    if r2[r] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
+                elif count == 3 and checkLeft and priority < 4:
+                    close = "c" + str (left + 1) + " r1"
+                    if r2[left] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -530,7 +661,25 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
         for r in range (7):
             if r2[r] == "p1":
                 count += 1
+                if count == 1:
+                    if r != 0 and r2[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
             if count < 4 and r2[r] != "p1":
+                if r2[r] == "free" and count == 3 and priority < 4:
+                    close = "c" + str (r + 1) + " r2"
+                    if r3[r] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
+                elif count == 3 and checkLeft and priority < 4:
+                    close = "c" + str (left + 1) + " r2"
+                    if r3[left] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -543,7 +692,25 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
         for r in range (7):
             if r3[r] == "p1":
                 count += 1
+                if count == 1:
+                    if r != 0 and r3[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
             if count < 4 and r3[r] != "p1":
+                if r3[r] == "free" and count == 3 and priority < 4:
+                    close = "c" + str (r + 1) + " r3"
+                    if r4[r] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
+                elif count == 3 and checkLeft and priority < 4:
+                    close = "c" + str (left + 1) + " r3"
+                    if r4[left] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -556,7 +723,25 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
         for r in range (7):
             if r4[r] == "p1":
                 count += 1
+                if count == 1:
+                    if r != 0 and r4[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
             if count < 4 and r4[r] != "p1":
+                if r4[r] == "free" and count == 3 and priority < 4:
+                    close = "c" + str (r + 1) + " r4"
+                    if r5[r] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
+                elif count == 3 and checkLeft and priority < 4:
+                    close = "c" + str (left + 1) + " r4"
+                    if r5[left] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -569,7 +754,25 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
         for r in range (7):
             if r5[r] == "p1":
                 count += 1
+                if count == 1:
+                    if r != 0 and r5[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
             if count < 4 and r5[r] != "p1":
+                if r5[r] == "free" and count == 3 and priority < 4:
+                    close = "c" + str (r + 1) + " r5"
+                    if r6[r] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
+                elif count == 3 and checkLeft and priority < 4:
+                    close = "c" + str (left + 1) + " r5"
+                    if r6[left] == "free":
+                        priority = 2
+                    else:
+                        priority = 4
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -582,7 +785,19 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
         for r in range (7):
             if r6[r] == "p1":
                 count += 1
+                if count == 1:
+                    if r != 0 and r6[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
             if count < 4 and r6[r] != "p1":
+                if r6[r] == "free" and count == 3 and priority < 4:
+                    close = "c" + str (r + 1) + " r6"
+                    priority = 4
+                elif count == 3 and checkLeft and priority < 4:
+                    close = "c" + str (left + 1) + " r6"
+                    priority = 4
                 count = 0
             if count >= 4:
                 winner = "p1"
@@ -592,78 +807,180 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 winner = "none"
     #Player 2 Horizontal
     if not gameOver:
-        count = 0
+        count2 = 0
         for r in range (7):
             if r1[r] == "p2":
-                count += 1
-            if count < 4 and r1[r] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+                if count2 == 1:
+                    if r != 0 and r1[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
+            if count2 < 4 and r1[r] != "p2":
+                if r1[r] == "free" and count == 3 and priority2 < 1:
+                    close2 = "c" + str (r + 1) + " r1"
+                    if r2[r] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                elif count == 3 and checkLeft and priority2 < 1:
+                    close2 = "c" + str (left + 1) + " r1"
+                    if r2[left] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for r in range (7):
             if r2[r] == "p2":
-                count += 1
-            if count < 4 and r2[r] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+                if count2 == 1:
+                    if r != 0 and r2[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
+            if count2 < 4 and r2[r] != "p2":
+                if r2[r] == "free" and count == 3 and priority2 < 1:
+                    close2 = "c" + str (r + 1) + " r2"
+                    if r3[r] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                elif count == 3 and checkLeft and priority2 < 1:
+                    close2 = "c" + str (left + 1) + " r2"
+                    if r3[left] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for r in range (7):
             if r3[r] == "p2":
-                count += 1
-            if count < 4 and r3[r] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+                if count2 == 1:
+                    if r != 0 and r3[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
+            if count2 < 4 and r3[r] != "p2":
+                if r3[r] == "free" and count == 3 and priority2 < 1:
+                    close2 = "c" + str (r + 1) + " r3"
+                    if r4[r] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                elif count == 3 and checkLeft and priority2 < 1:
+                    close2 = "c" + str (left + 1) + " r3"
+                    if r4[left] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for r in range (7):
             if r4[r] == "p2":
-                count += 1
-            if count < 4 and r4[r] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+                if count2 == 1:
+                    if r != 0 and r4[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
+            if count2 < 4 and r4[r] != "p2":
+                if r4[r] == "free" and count == 3 and priority2 < 1:
+                    close2 = "c" + str (r + 1) + " r4"
+                    if r5[r] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                elif count == 3 and checkLeft and priority2 < 1:
+                    close2 = "c" + str (left + 1) + " r4"
+                    if r5[left] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for r in range (7):
             if r5[r] == "p2":
-                count += 1
-            if count < 4 and r5[r] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+                if count2 == 1:
+                    if r != 0 and r5[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
+            if count2 < 4 and r5[r] != "p2":
+                if r5[r] == "free" and count == 3 and priority2 < 1:
+                    close2 = "c" + str (r + 1) + " r5"
+                    if r6[r] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                elif count == 3 and checkLeft and priority2 < 1:
+                    close2 = "c" + str (left + 1) + " r5"
+                    if r6[left] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for r in range (7):
             if r6[r] == "p2":
-                count += 1
-            if count < 4 and r6[r] != "p2":
-                count = 0
-            if count >= 4:
+                count2 += 1
+                if count2 == 1:
+                    if r != 0 and r6[r - 1] == "free":
+                        checkLeft = True
+                        left = r - 1
+                    else:
+                        checkLeft = False
+            if count2 < 4 and r6[r] != "p2":
+                if r6[r] == "free" and count == 3 and priority2 < 1:
+                    close2 = "c" + str (r + 1) + " r6"
+                    priority2 = 1
+                elif count == 3 and checkLeft and priority2 < 1:
+                    close2 = "c" + str (left + 1) + " r6"
+                    priority2 = 1
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
@@ -681,6 +998,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c4[d + 3] == "p1":
                 count +=1
+            if c4[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c4[" + str (d + 3) + "]"
+                if c4[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c1[d] == "free" and count == 3 and priority < 3:
+                close = "c1[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c1[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -700,6 +1032,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c5[d + 3] == "p1":
                 count +=1
+            if c5[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c5[" + str (d + 3) + "]"
+                if c5[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c2[d] == "free" and count == 3 and priority < 3:
+                close = "c2[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c2[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -719,6 +1066,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c6[d + 3] == "p1":
                 count +=1
+            if c6[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c6[" + str (d + 3) + "]"
+                if c6[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c3[d] == "free" and count == 3 and priority < 3:
+                close = "c3[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c3[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -738,6 +1100,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c7[d + 3] == "p1":
                 count +=1
+            if c7[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c7[" + str (d + 3) + "]"
+                if c7[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c4[d] == "free" and count == 3 and priority < 3:
+                close = "c4[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c4[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -748,76 +1125,136 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 winner = "none"
     #Player 2 Diagonal (Up-Right)
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c1[d] == "p2":
-                count += 1
+                count2 += 1
             if c2[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c3[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c4[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c4[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c4[" + str (d + 3) + "]"
+                if c4[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c1[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c1[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c1[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c2[d] == "p2":
-                count += 1
+                count2 += 1
             if c3[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c4[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c5[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c5[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c5[" + str (d + 3) + "]"
+                if c5[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c2[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c2[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c2[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c3[d] == "p2":
-                count += 1
+                count2 += 1
             if c4[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c5[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c6[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c6[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c6[" + str (d + 3) + "]"
+                if c6[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c3[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c3[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c3[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c4[d] == "p2":
-                count += 1
+                count2 += 1
             if c5[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c6[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c7[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c7[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c7[" + str (d + 3) + "]"
+                if c7[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c4[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c4[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c4[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
@@ -835,6 +1272,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c4[d + 3] == "p1":
                 count +=1
+            if c4[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c4[" + str (d + 3) + "]"
+                if c4[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c7[d] == "free" and count == 3 and priority < 3:
+                close = "c7[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c7[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -854,6 +1306,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c3[d + 3] == "p1":
                 count +=1
+            if c3[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c3[" + str (d + 3) + "]"
+                if c3[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c6[d] == "free" and count == 3 and priority < 3:
+                close = "c6[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c6[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -873,6 +1340,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c2[d + 3] == "p1":
                 count +=1
+            if c2[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c2[" + str (d + 3) + "]"
+                if c2[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c5[d] == "free" and count == 3 and priority < 3:
+                close = "c5[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c5[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -892,6 +1374,21 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 count +=1
             if c1[d + 3] == "p1":
                 count +=1
+            if c1[d + 3] == "free" and count == 3 and priority < 3:
+                close = "c1[" + str (d + 3) + "]"
+                if c1[d + 2] == "free":
+                    priority = 1
+                else:
+                    priority = 3
+            elif c4[d] == "free" and count == 3 and priority < 3:
+                close = "c4[" + str (d) + "]"
+                if d == 0:
+                    priority = 3
+                else:
+                    if c4[d - 1] == "free":
+                        priority = 1
+                    else:
+                        priority = 3
             if count < 4:
                 count = 0
             if count >= 4:
@@ -902,76 +1399,136 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 winner = "none"
     #Player 2 Diagonal (Up-Left)
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c7[d] == "p2":
-                count += 1
+                count2 += 1
             if c6[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c5[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c4[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c4[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c4[" + str (d + 3) + "]"
+                if c4[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c7[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c7[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c7[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c6[d] == "p2":
-                count += 1
+                count2 += 1
             if c5[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c4[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c3[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c3[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c3[" + str (d + 3) + "]"
+                if c3[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c6[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c6[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c6[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c5[d] == "p2":
-                count += 1
+                count2 += 1
             if c4[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c3[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c2[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c2[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c2[" + str (d + 3) + "]"
+                if c2[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c5[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c5[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c5[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
                 gameOver = False
                 winner = "none"
     if not gameOver:
-        count = 0
+        count2 = 0
         for d in range (3):
             if c4[d] == "p2":
-                count += 1
+                count2 += 1
             if c3[d + 1] == "p2":
-                count +=1
+                count2 +=1
             if c2[d + 2] == "p2":
-                count +=1
+                count2 +=1
             if c1[d + 3] == "p2":
-                count +=1
-            if count < 4:
-                count = 0
-            if count >= 4:
+                count2 +=1
+            if c1[d + 3] == "free" and count == 3 and priority2 < 1:
+                close2 = "c1[" + str (d + 3) + "]"
+                if c1[d + 2] == "free":
+                    priority2 = 0
+                else:
+                    priority2 = 1
+            elif c4[d] == "free" and count == 3 and priority2 < 1:
+                close2 = "c4[" + str (d) + "]"
+                if d == 0:
+                    priority2 = 1
+                else:
+                    if c4[d - 1] == "free":
+                        priority2 = 0
+                    else:
+                        priority2 = 1
+            if count2 < 4:
+                count2 = 0
+            if count2 >= 4:
                 winner = "p2"
                 gameOver = True
             else:
@@ -986,7 +1543,7 @@ def checkGameOver(r1,r2,r3,r4,r5,r6):
                 break
             gameOver = True
             winner = "none"
-    return gameOver,winner
+    return gameOver,winner,close,priority,close2,priority2
 
 #Main
 again = "Y"
@@ -1012,20 +1569,36 @@ while again.upper() == "Y":
 
     if solo == "1":
         gameOver = False
+        valid = False
+        while not valid:
+            print (bcolors.GREEN + "\n\n1. Easy\n2. Normal" + bcolors.ENDC)
+            difficulty = input (bcolors.GREEN + "\nChoice: " + bcolors.ENDC)
+            if difficulty == "1":
+                dif = "ez"
+                valid = True
+            elif difficulty == "2":
+                dif = "norm"
+                valid = True
+            else:
+                print (bcolors.RED + "\nInvalid choice!" + bcolors.ENDC)
+                valid = False
         board()
         while not gameOver:
             player = 1
             choice = input (bcolors.GREEN + "\nColumn: " + bcolors.ENDC)
             choice = validChoice(choice,player)
             r1,r2,r3,r4,r5,r6 = updateBoard()
-            gameOver,winner = checkGameOver(r1,r2,r3,r4,r5,r6)
+            gameOver,winner,close,priority,close2,priority2 = checkGameOver(r1,r2,r3,r4,r5,r6)
             if gameOver:
                 break
             time.sleep (0.5)
             comp = random.randint (1,7)
-            comp = validColumn(comp)
+            if dif == "norm":
+                comp = normMode(r1,comp,close,priority,close2,priority2)
+            else:
+                comp = validColumn(comp)
             r1,r2,r3,r4,r5,r6 = updateBoard()
-            gameOver,winner = checkGameOver(r1,r2,r3,r4,r5,r6)
+            gameOver,winner,close,priority,close2,priority2 = checkGameOver(r1,r2,r3,r4,r5,r6)
         if winner == "p1":
             winner1()
         elif winner == "p2":
@@ -1043,14 +1616,14 @@ while again.upper() == "Y":
             choice = input (bcolors.GREEN + "\nPlayer 1 column: " + bcolors.ENDC)
             choice = validChoice(choice,player)
             r1,r2,r3,r4,r5,r6 = updateBoard()
-            gameOver,winner = checkGameOver(r1,r2,r3,r4,r5,r6)
+            gameOver,winner,close,priority,close2,priority2 = checkGameOver(r1,r2,r3,r4,r5,r6)
             if gameOver:
                 break
             player = 2
             choice2 = input (bcolors.GREEN + "\nPlayer 2 column: " + bcolors.ENDC)
             choice2 = validChoice(choice2,player)
             r1,r2,r3,r4,r5,r6 = updateBoard()
-            gameOver,winner = checkGameOver(r1,r2,r3,r4,r5,r6)
+            gameOver,winner,close,priority,close2,priority2 = checkGameOver(r1,r2,r3,r4,r5,r6)
         if winner == "p1":
             winner1()
         elif winner == "p2":
@@ -1059,6 +1632,5 @@ while again.upper() == "Y":
             draw()
         again = input (bcolors.GREEN + "\nWant to play again? (Y/N): " + bcolors.ENDC)
         print ("")
-
     else:
         print (bcolors.RED + "\nInvalid choice!\n" + bcolors.ENDC)
