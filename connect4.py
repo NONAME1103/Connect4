@@ -103,6 +103,8 @@ def draw():
 def normMode(rows,col,close,priority,close2,priority2):
     if priority2 == 0:
         if priority == 0 and close != "any":
+            update = False
+            col = validColumn(col,update)
             while col == int (close[1]):
                 full = 0
                 for c in range (len (rows["r1"])):
@@ -115,8 +117,6 @@ def normMode(rows,col,close,priority,close2,priority2):
                     col = random.randint (1,7)
                     update = False
                     col = validColumn(col,update)
-            update = False
-            col = validColumn(col,update)
         elif priority == 0:
             update = False
             col = validColumn(col,update)
