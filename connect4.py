@@ -147,7 +147,8 @@ def validColumn(col,update):
                                 if col == int (column[1]) and columns[column][c] == "free":
                                     columns[column][c] = "p2"
                                     break
-                        break
+                        else:
+                            break
                 else:
                     col = random.randint (1,7)
                     valid = False
