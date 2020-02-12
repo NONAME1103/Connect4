@@ -538,14 +538,12 @@ Choose a Game Mode:
                 print (bcolors.RED + "\nInvalid choice!" + bcolors.ENDC)
                 valid = False
         board()
-        first = True
         while not gameOver:
             player = 1
             choice = input (bcolors.GREEN + "\nColumn: " + bcolors.ENDC)
             choice = validChoice(choice,player)
             reset()
             rows = updateBoard()
-            first = False
             gameOver,winner,close,priority,close2,priority2 = checkGameOver(rows)
             if gameOver:
                 break
@@ -571,14 +569,12 @@ Choose a Game Mode:
     elif solo == "2":
         gameOver = False
         board()
-        first = True
         while not gameOver:
             player = 1
             choice = input (bcolors.GREEN + "\nPlayer 1 column: " + bcolors.ENDC)
             choice = validChoice(choice,player)
             reset()
             rows = updateBoard()
-            first = False
             gameOver,winner,close,priority,close2,priority2 = checkGameOver(rows)
             if gameOver:
                 break
