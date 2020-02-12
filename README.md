@@ -3,7 +3,8 @@ A connect 4 game against the computer or someone next to you.
 
 For game rules visit: https://en.wikipedia.org/wiki/Connect_Four
 
-Recommended to run in terminal or command prompt (or Atom)
+Recommended to run in Atom (using platformio-ide-terminal package). 
+Terminal or command prompt also work.
 
 ### Made with:
 
