@@ -3,7 +3,7 @@ A connect 4 game against the computer or someone next to you.
 #
 For game rules visit: https://en.wikipedia.org/wiki/Connect_Four
 # 
-Recommended to run in Atom (using platformio-ide-terminal package). 
+Recommended to run in Atom (using [platformio-ide-terminal package](https://atom.io/packages/platformio-ide-terminal)). 
 
 Terminal or command prompt also work.
 
