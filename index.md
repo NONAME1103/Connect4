@@ -2,7 +2,7 @@
 A connect 4 game against the computer or someone next to you. 
 
 
-For game rules visit: https://en.wikipedia.org/wiki/Connect_Four
+For game rules visit: [https://en.wikipedia.org/wiki/Connect_Four](https://en.wikipedia.org/wiki/Connect_Four)
  
 # Useage
 
