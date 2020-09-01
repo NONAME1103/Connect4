@@ -22,7 +22,8 @@ Options:
   -a, --ascii  This changes the game piece into a (less-fitting) ascii
                character. Use if the game piece is an invalid character
 ```
-#
+
+
 * Recommended to run in Atom (using [platformio-ide-terminal package](https://atom.io/packages/platformio-ide-terminal)). 
 
 
