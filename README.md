@@ -23,9 +23,10 @@ Options:
                character. Use if the game piece is an invalid character
 ```
 #
-Recommended to run in Atom (using [platformio-ide-terminal package](https://atom.io/packages/platformio-ide-terminal)). 
+* Recommended to run in Atom (using [platformio-ide-terminal package](https://atom.io/packages/platformio-ide-terminal)). 
 
-Terminal or command prompt also work (May need the use of the -a option).
+
+* Terminal or command prompt also work (May need the use of the -a option).
 
 ### Made with:
 
