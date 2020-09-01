@@ -1,37 +1,38 @@
-## Welcome to GitHub Pages
+# Connect4
+A connect 4 game against the computer or someone next to you. 
+#
+For game rules visit: https://en.wikipedia.org/wiki/Connect_Four
+# 
+# Useage
 
-You can use the [editor on GitHub](https://github.com/NONAME1103/Connect4/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+```
+python connect4.py
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+Adding -h option gives the following output:
 
-### Jekyll Themes
+```
+python .\connect4.py -h
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/NONAME1103/Connect4/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+Usage: connect4.py [options]
 
-### Support or Contact
+Options:
+  -h, --help   show this help message and exit
+  -a, --ascii  This changes the game piece into a (less-fitting) ascii
+               character. Use if the game piece is an invalid character
+```
+#
+* Recommended to run in Atom (using [platformio-ide-terminal package](https://atom.io/packages/platformio-ide-terminal)). 
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+
+* Terminal or command prompt also work (May need the use of the -a option).
+
+### Made with:
+
+* [Python (3.8)](https://www.python.org) - Programing Language
+* [Atom](https://Atom.io) - Text Editor
+
+### Questions and Issues:
+If you have any questions or problems, just submit an issue and I'll
+try my best to get to it 
