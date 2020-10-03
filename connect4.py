@@ -17,7 +17,7 @@ class colours():
         self.green     = '\033[92m'
 
     def colourTest(self):
-        print (f"{self.red}Lol red{self.end} {self.bold}Lol bold{self.end} {self.yellow}Lol yellow{self.end} {self.grey}Lol grey{self.end} {self.white}Lol white{self.end} {self.green}Lol green{self.end} {self.end}Oof normal")
+        print (f"{self.bold}Bold{self.end} {self.red}Red{self.end} {self.yellow}Yellow{self.end} {self.grey}Grey{self.end} {self.white}White{self.end} {self.green}Green{self.end} {self.end}Normal")
 
 
 class connect4():
