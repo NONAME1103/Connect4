@@ -1,9 +1,8 @@
 from sys import platform
 from os import system
-from random import choice, choices, shuffle
+from random import choice, shuffle
 from time import sleep
 from optparse import OptionParser
-# import dill
 from sys import exit
 
 class colours():
@@ -17,7 +16,7 @@ class colours():
         self.green     = '\033[92m'
 
     def colourTest(self):
-        print (f"{self.bold}Bold{self.end} {self.red}Red{self.end} {self.yellow}Yellow{self.end} {self.grey}Grey{self.end} {self.white}White{self.end} {self.green}Green{self.end} {self.end}Normal")
+        print (f"{self.red}Lol red{self.end} {self.bold}Lol bold{self.end} {self.yellow}Lol yellow{self.end} {self.grey}Lol grey{self.end} {self.white}Lol white{self.end} {self.green}Lol green{self.end} {self.end}Oof normal")
 
 
 class connect4():
@@ -37,8 +36,44 @@ Choose a Game Mode:
 1) 1 player (against computer)
 2) 2 players (1v1)
 ''' + c.end + '--------------------------------------------------------------')
-        players = input (c.green + "\nChoice: " + c.end)
-        return players
+        playerNum = input (c.green + "\nChoice: " + c.end)
+        if playerNum in ["1", "2"]:
+            ai = True if playerNum == "1" else False
+        else:
+            print (c.red + "\nInvalid choice!\n" + c.end)
+            sleep(0.5)
+            return self.title()
+        return ai
+
+    def diffSelect(self):
+        print(c.yellow + '''
+    Choose a Difficulty:
+    1) Easy
+    2) Normal
+    3) Hard
+    ''' + c.end + '--------------------------------------------------------------')
+        difficulty = input (c.green + "\nChoice: " + c.end)
+        if difficulty in ["1", "2", "3"]:
+            return difficulty
+        else:
+            print (c.red + "\nInvalid choice!\n" + c.end)
+            sleep(0.5)
+            return self.diffSelect()
+
+    def colourSelect(self):
+        print(c.yellow + '''
+        Choose a Colour:
+        1) Red
+        2) Yellow
+        NOTE: Red moves first
+        ''' + c.end + '--------------------------------------------------------------')
+        playerColour = input (c.green + "\nChoice: " + c.end)
+        if playerColour in ["1", "2"]:
+            return playerColour
+        else:
+            print (c.red + "\nInvalid choice!\n" + c.end)
+            sleep(0.5)
+            return self.colourSelect()
 
     def printBoard(self):
         char = "◉" if not ascii else "■"
@@ -116,8 +151,10 @@ Choose a Game Mode:
         gameOver = False
         winner = None
         if close:
-            close1 = {}
-            close2 = {}
+            max3s = 0
+            max2s = 0
+            min3s = 0
+            min2s = 0
         # Checks for a horizontal win
         for row in range (len (board)):
             count1 = 0
@@ -133,10 +170,14 @@ Choose a Game Mode:
                 if cell == "free":
                     count1 = 0
                     count2 = 0
-                if close and count1 in (2, 3):
-                    close1[(row, col + 1)] = count1
-                if close and count2 in (2, 3):
-                    close2[(row, col + 1)] = count2
+                if close and count1 == 2:
+                    max2s += 1
+                if close and count1 == 3:
+                    max3s += 1
+                if close and count2 == 2:
+                    min2s += 1
+                if close and count2 == 3:
+                    min3s += 1
                 if count1 >= 4:
                     gameOver = True
                     winner = "p1"
@@ -161,10 +202,14 @@ Choose a Game Mode:
                     if cell == "free":
                         count1 = 0
                         count2 = 0
-                    if close and count1 in (2, 3):
-                        close1[(row + 1, col)] = count1
-                    if close and count2 in (2, 3):
-                        close2[(row + 1, col)] = count2
+                    if close and count1 == 2:
+                        max2s += 1
+                    if close and count1 == 3:
+                        max3s += 1
+                    if close and count2 == 2:
+                        min2s += 1
+                    if close and count2 == 3:
+                        min3s += 1
                     if count1 >= 4:
                         gameOver = True
                         winner = "p1"
@@ -197,16 +242,14 @@ Choose a Game Mode:
                         if cell == "free":
                             count1 = 0
                             count2 = 0
-                        if close and count1 in (2, 3):
-                            if time == 0:
-                                close1[(row - 1, col + 1)] = count1
-                            else:
-                                close1[(row - 1, col - 1)] = count1
-                        if close and count2 in (2, 3):
-                            if time == 0:
-                                close2[(row - 1, col + 1)] = count2
-                            else:
-                                close2[(row - 1, col - 1)] = count2
+                        if close and count1 == 2:
+                            max2s += 1
+                        if close and count1 == 3:
+                            max3s += 1
+                        if close and count2 == 2:
+                            min2s += 1
+                        if close and count2 == 3:
+                            min3s += 1
                         if count1 >= 4:
                             gameOver = True
                             winner = "p1"
@@ -223,7 +266,7 @@ Choose a Game Mode:
                 winner = None
         # Returns the dictionaries of cells that would benefit each player
         if close:
-            return close1, close2
+            return max3s, max2s, min3s, min2s
         return gameOver, winner
 
     def winners(self, winner):
@@ -275,7 +318,7 @@ class bot():
     def utility(self, board):
         over, win = game.checkGameOver(board)
         if over:
-            return 1 if win == "p1" else -1 if win == "p2" else 0
+            return 10000 if win == "p1" else -10000 if win == "p2" else 0
 
     def move(self, difficulty, board):
         boardCopy = [[cell for cell in row] for row in board]
@@ -284,100 +327,59 @@ class bot():
             action = choice(list(actions))
             sleep(0.5)
         elif difficulty == "2":
-            self.movesAhead = 1000
-            self.count = 0
-            action = self.minimax(boardCopy)
+            player = game.player(board)
+            depth = 4
+            action = self.minimax(boardCopy, depth, -float("inf"), float("inf"), player == 1)[0]
+            sleep(0.3)
+        else:
+            player = game.player(board)
+            depth = 6
+            action = self.minimax(boardCopy, depth, -float("inf"), float("inf"), player == 1)[0]
+            sleep(0.2)
         return action
 
-    def minimax(self, board):
-        over, win = game.checkGameOver(board)
-        if over: return None
-        player = game.player(board)
-        ai = "MAX" if player == 1 else "MIN" if player == 2 else None
-        boardCopy = [[cell for cell in row] for row in board]
-        if ai == "MAX":
-            v = self.MaxValue(boardCopy)
-            boardCopy = [[cell for cell in row] for row in board]
-            acts = list(self.getActions(board))
-            shuffle(acts)
-            for action in acts:
-                if self.MinValue(self.result(boardCopy, action)) == v:
-                    return action
+    def minimax(self, board, depth, alpha, beta, maxPlayer):
+        over, winner = game.checkGameOver(board)
+        if over:
+            return None, self.utility(board)
+        if depth == 0:
+            return None, self.evaluation(board)
+        if maxPlayer:
+            val = -float("inf")
+            col = choice(list(self.getActions(board)))
+            moves = list(self.getActions(board))
+            shuffle(moves)
+            for move in moves:
                 boardCopy = [[cell for cell in row] for row in board]
-            return choice(list(acts))
-        elif ai == "MIN":
-            v = self.MinValue(boardCopy)
-            boardCopy = [[cell for cell in row] for row in board]
-            acts = list(self.getActions(board))
-            shuffle(acts)
-            for action in acts:
-                if self.MaxValue(self.result(boardCopy, action)) == v:
-                    return action
+                newVal = self.minimax(self.result(boardCopy, move), depth - 1, alpha, beta, False)[1]
+                if newVal > val:
+                    val = newVal
+                    col = move
+                alpha = max(alpha, val)
+                if alpha >= beta:
+                    break
+            return col, val
+        else:
+            val = float("inf")
+            moves = list(self.getActions(board))
+            shuffle(moves)
+            for move in moves:
                 boardCopy = [[cell for cell in row] for row in board]
-            return choice(list(acts))
-
-    def MaxValue(self, board):
-        over, win = game.checkGameOver(board)
-        if over: return self.utility(board)
-        boardCopy = [[cell for cell in row] for row in board]
-        v = -2
-        acts = list(self.getActions(board))
-        shuffle(acts)
-        for action in acts:
-            self.count += 1
-            if self.count >= self.movesAhead:
-                min = self.evaluation(board)
-                # print (f"Max moves {self.count} {self.movesAhead}")
-            else:
-                min = self.MinValue(self.result(board, action))
-            v = max (v, min)
-            over, win = game.checkGameOver(board)
-            if over:
-                board = [[cell for cell in row] for row in boardCopy]
-                if v == 1: return v
-        return v
-
-    def MinValue(self, board):
-        over, win = game.checkGameOver(board)
-        if over: return self.utility(board)
-        boardCopy = [[cell for cell in row] for row in board]
-        v = 2
-        acts = list(self.getActions(board))
-        shuffle(acts)
-        for action in acts:
-            self.count += 1
-            if self.count >= self.movesAhead:
-                max = self.evaluation(board)
-                # print (f"Max moves {self.count} {self.movesAhead}")
-            else:
-                max = self.MaxValue(self.result(board, action))
-            v = min (v, max)
-            over, win = game.checkGameOver(board)
-            if over:
-                board = [[cell for cell in row] for row in boardCopy]
-                if v == -1: return v
-        return v
+                newVal = self.minimax(self.result(boardCopy, move), depth - 1, alpha, beta, True)[1]
+                if newVal < val:
+                    val = newVal
+                    col = move
+                beta = min(beta, val)
+                if alpha >= beta:
+                    break
+            return col, val
 
     def evaluation(self, board):
-        over, win = game.checkGameOver(board)
+        over, winner = game.checkGameOver(board)
         if over: return self.utility(board)
-        close1, close2 = game.checkGameOver(board, close = True)
-        c1 = len(close1)
-        c2 = len(close2)
-        try:
-            v = (c1 - c2)/(c1 + c2)
-        except ZeroDivisionError:
-            v = 0
-        # from pprint import pprint
-        # pprint (board)
-        # print ("\nP1")
-        # for key in close1:
-        #     print (f"{key}: {close1[key]}")
-        # print ("\nP2")
-        # for key in close2:
-        #     print (f"{key}: {close2[key]}")
-        # exit()
-        return v
+        max3s, max2s, min3s, min2s = game.checkGameOver(board, close = True)
+        val = (max3s * 10 + max2s) - (min3s * 10 + min2s)
+        return val
 
 
 def clear():
@@ -390,7 +392,6 @@ def clear():
 if __name__ == "__main__":
     try:
         c = colours()
-        # There are 4,531,985,219,092 total possible games of connect 4
         bot = bot()
         # c.colourTest()
         parser = OptionParser()
@@ -401,49 +402,10 @@ if __name__ == "__main__":
         while playing:
             clear()
             game = connect4()
-            valid = False
-            while not valid:
-                playerNum = game.title()
-                if playerNum in ["1", "2"]:
-                    valid = True
-                    ai = True if playerNum == "1" else False
-                else:
-                    print (c.red + "\nInvalid choice!\n" + c.end)
-                    sleep(0.5)
-            playerColour = 0
+            ai = game.title()
             if ai:
-                valid = False
-                while not valid:
-                    print(c.yellow + '''
-            Choose a Difficulty:
-            1) Easy
-            2) Normal (In progress)
-            3) Hard (In progress)
-            ''' + c.end + '--------------------------------------------------------------')
-                    difficulty = input (c.green + "\nChoice: " + c.end)
-                    if difficulty in ["1", "2", "3"]:
-                        valid = True
-                        if difficulty in ["2", "3"]:
-                            print (c.yellow + "\nThis difficulty is currently under development.\nThe legacy branch has working implementatiosn of \"Easy\" and \"Normal\" difficulties.\n" + c.end)
-                            valid = False
-                            continue
-                    else:
-                        print (c.red + "\nInvalid choice!\n" + c.end)
-                        sleep(0.5)
-                valid = False
-                while not valid:
-                    print(c.yellow + '''
-                Choose a Colour:
-                1) Red
-                2) Yellow
-                NOTE: Red moves first
-                ''' + c.end + '--------------------------------------------------------------')
-                    playerColour = input (c.green + "\nChoice: " + c.end)
-                    if playerColour in ["1", "2"]:
-                        valid = True
-                    else:
-                        print (c.red + "\nInvalid choice!\n" + c.end)
-                        sleep(0.5)
+                difficulty = game.diffSelect()
+                playerColour = game.colourSelect()
             gameOver = False
             while not gameOver:
                 game.printBoard()
@@ -457,11 +419,10 @@ if __name__ == "__main__":
                         valid = game.validChoice (action)
                 game.move(int(action))
                 gameOver, winner = game.checkGameOver()
+                clear()
                 if gameOver:
                     clear()
                     game.printBoard()
-                    break
-                clear()
             game.winners(winner)
             valid = False
             while not valid:
@@ -473,6 +434,7 @@ if __name__ == "__main__":
                     break
                 print (c.red + "\nInvalid choice!\n" + c.end)
                 sleep(0.5)
+
     except KeyboardInterrupt:
         print ("\n\nExiting...\n")
         exit()
