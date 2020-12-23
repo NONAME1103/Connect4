@@ -162,8 +162,10 @@ Choose a Game Mode:
         gameOver = False
         winner = None
         if close:
+            max4s = 0
             max3s = 0
             max2s = 0
+            min4s = 0
             min3s = 0
             min2s = 0
         # Checks for a horizontal win
@@ -185,10 +187,14 @@ Choose a Game Mode:
                     max2s += 1
                 if close and count1 == 3:
                     max3s += 1
+                if close and count1 == 4:
+                    max4s += 1
                 if close and count2 == 2:
                     min2s += 1
                 if close and count2 == 3:
                     min3s += 1
+                if close and count2 == 4:
+                    min4s += 1
                 if count1 >= 4:
                     gameOver = True
                     winner = "p1"
@@ -221,10 +227,14 @@ Choose a Game Mode:
                         max2s += 1
                     if close and count1 == 3:
                         max3s += 1
+                    if close and count1 == 4:
+                        max4s += 1
                     if close and count2 == 2:
                         min2s += 1
                     if close and count2 == 3:
                         min3s += 1
+                    if close and count2 == 4:
+                        min4s += 1
                     if count1 >= 4:
                         gameOver = True
                         winner = "p1"
@@ -265,10 +275,14 @@ Choose a Game Mode:
                             max2s += 1
                         if close and count1 == 3:
                             max3s += 1
+                        if close and count1 == 4:
+                            max4s += 1
                         if close and count2 == 2:
                             min2s += 1
                         if close and count2 == 3:
                             min3s += 1
+                        if close and count2 == 4:
+                            min4s += 1
                         if count1 >= 4:
                             gameOver = True
                             winner = "p1"
@@ -293,7 +307,7 @@ Choose a Game Mode:
                 winner = None
         # Returns the dictionaries of cells that would benefit each player
         if close:
-            return max3s, max2s, min3s, min2s
+            return max4s, max3s, max2s, min4s, min3s, min2s
         if cells:
             return gameOver, []
         return gameOver, winner
@@ -406,8 +420,8 @@ class bot():
     def evaluation(self, board):
         over, winner = game.checkGameOver(board)
         if over: return self.utility(board)
-        max3s, max2s, min3s, min2s = game.checkGameOver(board, close = True)
-        val = (max3s * 10 + max2s) - (min3s * 10 + min2s)
+        max4s, max3s, max2s, min4s, min3s, min2s = game.checkGameOver(board, close = True)
+        val = ((max4s * 100) + (max3s * 10) + max2s) - ((min4s * 100) + (min3s * 10) + min2s)
         return val
 
 
