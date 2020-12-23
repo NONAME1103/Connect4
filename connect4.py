@@ -3,20 +3,20 @@ from os import system
 from random import choice, shuffle
 from time import sleep
 from optparse import OptionParser
-from sys import exit
 
 class colours():
     def __init__ (self):
         self.end       = '\033[0m'
-        self.bold      = '\033[1m'
-        self.red       = '\033[91m'
-        self.yellow    = '\033[93m'
+        self.bold      = '\033[;1m'
+        self.red       = '\033[91m' if not highCon else '\033[31m'
+        self.yellow    = '\033[93m' if not highCon else '\033[36m'
         self.grey      = '\033[90m'
         self.white     = '\033[38;2;255;255;255m'
         self.green     = '\033[92m'
+        self.blink     = '\033[;;5m'
 
     def colourTest(self):
-        print (f"{self.red}Lol red{self.end} {self.bold}Lol bold{self.end} {self.yellow}Lol yellow{self.end} {self.grey}Lol grey{self.end} {self.white}Lol white{self.end} {self.green}Lol green{self.end} {self.end}Oof normal")
+        print (f"{self.red}Lol red{self.end} {self.bold}Lol bold{self.end} {self.yellow}Lol yellow{self.end} {self.grey}Lol grey{self.end} {self.white}Lol white{self.end} {self.green}Lol green{self.end} {self.blink}Lol blink{self.end} {self.end}Oof normal")
 
 
 class connect4():
@@ -61,12 +61,20 @@ Choose a Game Mode:
             return self.diffSelect()
 
     def colourSelect(self):
-        print(c.yellow + '''
-        Choose a Colour:
-        1) Red
-        2) Yellow
-        NOTE: Red moves first
-        ''' + c.end + '--------------------------------------------------------------')
+        if not highCon:
+            print(c.yellow + '''
+            Choose a Colour:
+            1) Red
+            2) Yellow
+            NOTE: Red moves first
+            ''' + c.end + '--------------------------------------------------------------')
+        else:
+            print(c.yellow + '''
+            Choose a Colour:
+            1) Red
+            2) Cyan
+            NOTE: Red moves first
+            ''' + c.end + '--------------------------------------------------------------')
         playerColour = input (c.green + "\nChoice: " + c.end)
         if playerColour in ["1", "2"]:
             return playerColour
@@ -78,21 +86,24 @@ Choose a Game Mode:
     def printBoard(self):
         char = "◉" if not ascii else "■"
         count = 0
+        over, cells = self.checkGameOver(cells = True)
         print ("")
         if not ascii:
-            print (c.grey + "       |  " + c.end,end = "")
+            print (c.grey + "       |  " + c.end, end = "")
         else:
-            print (c.grey + "       |  " + c.end,end = "")
+            print (c.grey + "       |  " + c.end, end = "")
         for row in self.board:
-            count += 1
-            for space in range (len (row)):
+            for space in range (len(row)):
+                if over and (count, space) in cells:
+                    print (c.blink, end = "")
                 if row[space] == "free":
-                    print (c.white + c.bold + f"{char}  " + c.end,end = "")
+                    print (c.white + f"{char}  " + c.end, end = "")
                 elif row[space] == "p1":
-                    print (c.red + f"{char}  " + c.end,end = "")
+                    print (c.red + f"{char}  " + c.end, end = "")
                 elif row[space] == "p2":
-                    print (c.yellow + f"{char}  " + c.end,end = "")
+                    print (c.yellow + f"{char}  " + c.end, end = "")
             print (c.grey + "|" + c.end)
+            count += 1
             if count != 6:
                 if not ascii:
                     print (c.grey + "       |  " + c.end,end = "")
@@ -145,7 +156,7 @@ Choose a Game Mode:
                 row[action - 1] = player
                 break
 
-    def checkGameOver(self, board = None, close = False):
+    def checkGameOver(self, board = None, close = False, cells = False):
         if board == None:
             board = self.board
         gameOver = False
@@ -181,10 +192,14 @@ Choose a Game Mode:
                 if count1 >= 4:
                     gameOver = True
                     winner = "p1"
+                    if cells:
+                        return gameOver, [(row, col - c) for c in range (4)]
                     return gameOver, winner
                 elif count2 >= 4:
                     gameOver = True
                     winner = "p2"
+                    if cells:
+                        return gameOver, [(row, col - c) for c in range (4)]
                     return gameOver, winner
         # Checks for a vertical win
         if not gameOver:
@@ -213,10 +228,14 @@ Choose a Game Mode:
                     if count1 >= 4:
                         gameOver = True
                         winner = "p1"
+                        if cells:
+                            return gameOver, [(row - c, col) for c in range (4)]
                         return gameOver, winner
                     elif count2 >= 4:
                         gameOver = True
                         winner = "p2"
+                        if cells:
+                            return gameOver, [(row - c, col) for c in range (4)]
                         return gameOver, winner
         # Checks for a diagonal win
         if not gameOver:
@@ -253,10 +272,18 @@ Choose a Game Mode:
                         if count1 >= 4:
                             gameOver = True
                             winner = "p1"
+                            if cells:
+                                if time == 0:
+                                    return gameOver, [(row + c, col - c) for c in range (4)]
+                                return gameOver, [(row + c, col + c) for c in range (4)]
                             return gameOver, winner
                         elif count2 >= 4:
                             gameOver = True
                             winner = "p2"
+                            if cells:
+                                if time == 0:
+                                    return gameOver, [(row + c, col - c) for c in range (4)]
+                                return gameOver, [(row + c, col + c) for c in range (4)]
                             return gameOver, winner
         # Checks for a full board
         if not gameOver:
@@ -267,6 +294,8 @@ Choose a Game Mode:
         # Returns the dictionaries of cells that would benefit each player
         if close:
             return max3s, max2s, min3s, min2s
+        if cells:
+            return gameOver, []
         return gameOver, winner
 
     def winners(self, winner):
@@ -391,16 +420,18 @@ def clear():
 
 if __name__ == "__main__":
     try:
-        c = colours()
         bot = bot()
-        # c.colourTest()
         parser = OptionParser()
         parser.add_option('-a', '--ascii', default = False, action = 'store_true', dest = 'ascii', help='This changes the game piece into a (less-fitting) ascii character. Use if the game piece is an invalid character')
+        parser.add_option('--hc', '--high-contrast', default = False, action = 'store_true', dest = 'highCon', help='This changes the player colours into (less-fitting) more visible colours. Use if the game pieces are difficult to see')
         (options, argument) = parser.parse_args()
         ascii = options.ascii
+        highCon = options.highCon
+        c = colours()
         playing = True
         while playing:
             clear()
+            # c.colourTest()
             game = connect4()
             ai = game.title()
             if ai:
@@ -437,4 +468,3 @@ if __name__ == "__main__":
 
     except KeyboardInterrupt:
         print ("\n\nExiting...\n")
-        exit()
