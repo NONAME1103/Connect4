@@ -13,14 +13,17 @@ python connect4.py
 Adding -h option gives the following output:
 
 ```
-python .\connect4.py -h
-
 Usage: connect4.py [options]
 
 Options:
-  -h, --help   show this help message and exit
-  -a, --ascii  This changes the game piece into a (less-fitting) ascii
-               character. Use if the game piece is an invalid character
+  -h, --help            show this help message and exit
+  -a, --ascii           This changes the game piece into a (less-fitting)
+                        ascii character. Use if the game piece is an invalid
+                        character
+  --hc, --high-contrast
+                        This changes the player colours into (less-fitting)
+                        more visible colours. Use if the game pieces are
+                        difficult to see
 ```
 #
 * Recommended to run in Atom (using [platformio-ide-terminal package](https://atom.io/packages/platformio-ide-terminal)). 
