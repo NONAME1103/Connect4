@@ -3,6 +3,9 @@ A connect 4 game against the computer or someone next to you.
 #
 For game rules visit: https://en.wikipedia.org/wiki/Connect_Four
 # 
+# Update
+I am currently working on fixing up the code and implementing a GUI!
+#
 # Useage
 
 
