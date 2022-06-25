@@ -24,6 +24,7 @@ git clone https://github.com/NONAME1103/Connect4.git
 Or
 - Download the zip folder:
 ![image](https://user-images.githubusercontent.com/57779612/175475953-49a11cd7-898f-4136-a6e4-70ff5e7be424.png)
+  and extract the contents into a known directory.
 
 ## Usage
 1. Navigate to the downloaded reposity directory in terminal or command prompt:
